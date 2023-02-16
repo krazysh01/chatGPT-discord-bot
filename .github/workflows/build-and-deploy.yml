@@ -24,4 +24,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: krazysh01/discordgpt:latest
+          tags: ghcr.io/krazysh01/discordgpt:latest
