@@ -8,6 +8,7 @@ logger = log.setup_logger(__name__)
 
 isPrivate = False
 isReplyAll = False
+listenChannel = None
 
 class aclient(discord.Client):
     def __init__(self) -> None:
@@ -118,6 +119,7 @@ async def send_start_prompt(client):
 
 
 def run_discord_bot():
+    global listenChannel
     client = aclient()
 
     @client.event
@@ -212,6 +214,9 @@ def run_discord_bot():
         if isReplyAll:
             if message.author == client.user:
                 return
+            if listenChannel is not None and str(message.channel.id) != listenChannel:
+                logger.info("Message not in Dedicated Channel")
+                return
             username = str(message.author)
             user_message = str(message.content)
             channel = str(message.channel)
@@ -219,5 +224,6 @@ def run_discord_bot():
             await send_message(message, user_message)
     
     TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+    listenChannel = os.getenv("DISCORD_CHANNEL_ID")
 
     client.run(TOKEN)
