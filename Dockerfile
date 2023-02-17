@@ -1,7 +1,7 @@
-FROM python:3.10-alpine
+FROM ubuntu-latest
 
 ENV PYTHONUNBUFFERED 1
-RUN apk add --update \
+RUN apt-get update && apt-get install -y \
   build-base \
   cairo \
   cairo-dev \
