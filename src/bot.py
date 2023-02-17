@@ -96,18 +96,17 @@ async def send_message(message, user_message):
 async def send_start_prompt(client):
     import os.path
 
-    config_dir = os.path.abspath(__file__ + "/../../")
+    config_dir = os.path.abspath(__file__ + "/../../config/")
     prompt_name = 'starting-prompt.txt'
     prompt_path = os.path.join(config_dir, prompt_name)
-    discord_channel_id = os.getenv("DISCORD_CHANNEL_ID")
     try:
         if os.path.isfile(prompt_path) and os.path.getsize(prompt_path) > 0:
             with open(prompt_path, "r") as f:
                 prompt = f.read()
-                if (discord_channel_id):
+                if (listenChannel):
                     logger.info(f"Send starting prompt with size {len(prompt)}")
                     responseMessage = await responses.handle_response(prompt)
-                    channel = client.get_channel(int(discord_channel_id))
+                    channel = client.get_channel(int(listenChannel))
                     await channel.send(responseMessage)
                     logger.info(f"Starting prompt response:{responseMessage}")
                 else:
