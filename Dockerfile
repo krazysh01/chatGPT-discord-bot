@@ -2,31 +2,8 @@ FROM ubuntu:latest
 
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y \
-  build-base \
-  cairo \
-  cairo-dev \
-  cargo \
-  freetype-dev \
-  gcc \
-  gdk-pixbuf-dev \
-  gettext \
-  jpeg-dev \
-  lcms2-dev \
-  libffi-dev \
-  musl-dev \
-  openjpeg-dev \
-  openssl-dev \
-  pango-dev \
-  poppler-utils \
-  postgresql-client \
-  postgresql-dev \
-  py-cffi \
-  python3-dev \
-  rust \
-  tcl-dev \
-  tiff-dev \
-  tk-dev \
-  zlib-dev
+  python3.10 \
+  python3-pip
 
 RUN pip install cryptography
 COPY ./ /DiscordBot
