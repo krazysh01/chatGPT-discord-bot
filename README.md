@@ -1,26 +1,56 @@
 # ChatGPT Discord Bot
 
 > ### Build your own Discord bot using ChatGPT
+>
 ---
 > **Warning**
 >
-> #### 2023-02-10 Update: ChatGPT model but requires payment
-> #### 2023-02-08 Update: ChatGPT API is highly unstable now
-> #### 2023-02-03 Update: ChatGPT API working again
-> #### 2023-02-02 Update: OpenAI has closed ChatGPT API, temporarily switching to using GPT-3 model
-> #### 2023-02-01 Update: Now using the official ChatGPT API
-
+>According to OpenAI's latest announcement, using unofficial API may result in the ban of your account. Please assess the risks yourself
+>
+> #### 2023-03-16 OpenAI has deactivated some accounts using UNOFFICIAL model. Recommend using official model
+> #### 2023-03-14 Website ChatGPT model is unstable, suggest using the official API
+> #### 2023-03-03 Update: Official GPT-3.5 model
+> #### 2023-02-25 Update: Website ChatGPT model
 ## Features
 
 * `/chat [message]` Chat with ChatGPT!
+* `/draw [prompt]` Generate an image with the Dalle2 model
+* `/switchpersona [persona]` Switch between optional chatGPT jailbreaks
+   * `random`: Picks a random persona
+   * `chatGPT`: Standard chatGPT mode
+   * `dan`: Dan Mode 11.0, infamous Do Anything Now Mode
+   * `sda`: Superior DAN has even more freedom in DAN Mode
+   * `confidant`: Evil Confidant, evil trusted confidant
+   * `based`: BasedGPT v2, sexy gpt
+   * `oppo`: OPPO says exact opposite of what chatGPT would say
+   * `dev`: Developer Mode, v2 Developer mode enabled
+
 * `/private` ChatGPT switch to private mode
-* `/public`  ChatGPT switch to public  mode
-* `/replyall`  ChatGPT switch between replyall mode and default mode
+* `/public` ChatGPT switch to public mode
+* `/replyall` ChatGPT switch between replyAll mode and default mode
 * `/reset` Clear ChatGPT conversation history
+* `/chat-model` Switch different chat model
+   * `OFFICIAL`: GPT-3.5 model
+   * `UNOFFICIAL`: Website ChatGPT
+   * Modifying CHAT_MODEL field in the .env file change the default model
 
 ### Chat
 
 ![image](https://user-images.githubusercontent.com/89479282/206497774-47d960cd-1aeb-4fba-9af5-1f9d6ff41f00.gif)
+
+### Draw
+
+![image](https://user-images.githubusercontent.com/91911303/223772051-13f840d5-99ef-4762-98d2-d15ce23cbbd5.png)
+
+### Switch Persona
+
+> **Warning**
+>
+>Using certain personas may generate vulgar or disturbing content. Use at your own risk.
+
+![image](https://user-images.githubusercontent.com/91911303/223772334-7aece61f-ead7-4119-bcd4-7274979c4702.png)
+
+
 
 ### Mode
 
@@ -32,18 +62,20 @@
 
   ![image](https://user-images.githubusercontent.com/89479282/206565873-b181e600-e793-4a94-a978-47f806b986da.gif)
 
-* `replyall mode` the bot will reply to all messages in the server without using slash commands
+* `replyall mode` the bot will reply to all messages in the channel without using slash commands (`/chat` will also be unavailable)
 
    > **Warning**
    > The bot will easily be triggered in `replyall` mode, which could cause program failures
 
 # Setup
 
-## Install
+## Critical prerequisites to install
 
-1. `pip install -r requirements.txt`
-2. **Rename the file `.env.dev` to `.env`**
+* run ```pip3 install -r requirements.txt```
 
+* **Rename the file `.env.dev` to `.env`**
+
+* Recommended python version `3.10`
 ## Step 1: Create a Discord bot
 
 1. Go to https://discord.com/developers/applications create an application
@@ -53,34 +85,64 @@
    ![image](https://user-images.githubusercontent.com/89479282/205949161-4b508c6d-19a7-49b6-b8ed-7525ddbef430.png)
 4. Store the token to `.env` under the `DISCORD_BOT_TOKEN`
 
-   ![image](https://user-images.githubusercontent.com/89479282/217743218-26e3d999-44d5-4a0b-88e1-ee23f3ffd5d8.png)
-   
+   <img height="190" width="390" alt="image" src="https://user-images.githubusercontent.com/89479282/222661803-a7537ca7-88ae-4e66-9bec-384f3e83e6bd.png">
+
 5. Turn MESSAGE CONTENT INTENT `ON`
 
    ![image](https://user-images.githubusercontent.com/89479282/205949323-4354bd7d-9bb9-4f4b-a87e-deb9933a89b5.png)
-   
+
 6. Invite your bot to your server via OAuth2 URL Generator
 
    ![image](https://user-images.githubusercontent.com/89479282/205949600-0c7ddb40-7e82-47a0-b59a-b089f929d177.png)
+## Step 2: Official API authentication
 
-## Step 2: Generate a OpenAI API key
-
+### Geanerate an OpenAI API key
 1. Go to https://beta.openai.com/account/api-keys
 
 2. Click Create new secret key
 
    ![image](https://user-images.githubusercontent.com/89479282/207970699-2e0cb671-8636-4e27-b1f3-b75d6db9b57e.PNG)
 
-2. Store the SECRET KEY to `.env` under the `OPENAI_KEY`
+3. Store the SECRET KEY to `.env` under the `OPENAI_API_KEY`
+
+4. You're all set for [Step 3](#step-3-run-the-bot-on-the-desktop)
+
+## Step 2: Website ChatGPT authentication - 2 approaches
+
+### Email/Password authentication (Not supported for Google/Microsoft accounts)
+1. Create an account on https://chat.openai.com/chat
+
+2. Save your email into `.env` under `OPENAI_EMAIL`
+
+3. Save your password into `.env` under `OPENAI_PASSWORD`
+
+4. You're all set for [Step 3](#step-3-run-the-bot-on-the-desktop)
+
+### Session token authentication
+1. Go to https://chat.openai.com/chat log in
+
+2. Open console with `F12`
+
+2. Open `Application` tab > Cookies
+
+    ![image](https://user-images.githubusercontent.com/36258159/205494773-32ef651a-994d-435a-9f76-a26699935dac.png)
+
+3. Copy the value for `__Secure-next-auth.session-token` from cookies and paste it into `.env` under `SESSION_TOKEN`
+
+4. You're all set for [Step 3](#step-3-run-the-bot-on-the-desktop)
 
 ## Step 3: Run the bot on the desktop
+
 1. Open a terminal or command prompt
+
 2. Navigate to the directory where you installed the ChatGPT Discord bot
+
 3. Run `python3 main.py` to start the bot
 
 ## Step 3: Run the bot with Docker
 
 1. Build the Docker image & Run the Docker container `docker compose up -d`
+
 2. Inspect whether the bot works well `docker logs -t chatgpt-discord-bot`
 
    ### Stop the bot:
@@ -89,7 +151,9 @@
    * `docker stop <BOT CONTAINER ID>` to stop the running bot
 
 ### Have a good chat!
+## Optional: Disable logging
 
+* Set the value of `LOGGING` in the `.env` to False
 ## Optional: Setup starting prompt
 
 * A starting prompt would be invoked when the bot is first started or reset
@@ -98,7 +162,11 @@
 * Get the first message from ChatGPT in your discord channel!
 
    1. Right-click the channel you want to recieve the message, `Copy  ID`
-   
+
         ![channel-id](https://user-images.githubusercontent.com/89479282/207697217-e03357b3-3b3d-44d0-b880-163217ed4a49.PNG)
-    
+
    2. paste it into `.env` under `DISCORD_CHANNEL_ID`
+   
+ ---
+ [**中文說明**](https://zero6992.github.io/posts/chatgpt-discord-bot-chinese/)
+
