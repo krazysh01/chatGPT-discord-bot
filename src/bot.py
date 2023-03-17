@@ -319,7 +319,8 @@ def run_discord_bot():
         app_commands.Choice(name="Evil Confidant", value="confidant"),
         app_commands.Choice(name="BasedGPT v2", value="based"),
         app_commands.Choice(name="OPPO", value="oppo"),
-        app_commands.Choice(name="Developer Mode v2", value="dev")
+        app_commands.Choice(name="Developer Mode v2", value="dev"),
+        app_commands.Choice(name="Dave", value="dave")
     ])
     async def chat(interaction: discord.Interaction, persona: app_commands.Choice[str]):
         isReplyAll =  os.getenv("REPLYING_ALL")
@@ -346,7 +347,8 @@ def run_discord_bot():
         elif persona == "standard":
             chat_model = os.getenv("CHAT_MODEL")
             if chat_model == "OFFICIAL":
-                responses.chatbot.reset()
+                # responses.chatbot.reset()
+                pass
             elif chat_model == "UNOFFICIAL":
                 responses.chatbot.reset_chat()
 
@@ -359,14 +361,14 @@ def run_discord_bot():
             choice = randrange(0, 6)
             chosen_persona = choices[choice]
             personas.current_persona = chosen_persona
-            await responses.switch_persona(chosen_persona)
+            # await responses.switch_persona(chosen_persona)
             await interaction.followup.send(
                 f"> **Info: Switched to `{chosen_persona}` persona**")
 
 
         elif persona in personas.PERSONAS:
             try:
-                await responses.switch_persona(persona)
+                # await responses.switch_persona(persona)
                 personas.current_persona = persona
                 await interaction.followup.send(
                 f"> **Info: Switched to `{persona}` persona**")
