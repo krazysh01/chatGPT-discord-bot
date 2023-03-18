@@ -160,6 +160,15 @@ def run_discord_bot():
             f"\x1b[31m{username}\x1b[0m : /chat [{message}] in ({channel})")
         await send_message(interaction, message)
 
+    @client.tree.context_menu(name="Answer Question")
+    async def answer(interaction: discord.Interaction, message: discord.Message):
+        if interaction.user == client.user:
+            return
+        username = str(interaction.user)
+        channel = str(interaction.channel)
+        logger.info(
+            f"\x1b[31m{username}\x1b[0m : answered [{message}] in ({channel})")
+        await send_message(interaction, message.content)
 
     @client.tree.command(name="private", description="Toggle private access")
     async def private(interaction: discord.Interaction):
