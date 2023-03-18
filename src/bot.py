@@ -127,7 +127,14 @@ async def send_start_prompt(client):
 def run_discord_bot():
     global listenChannel
     client = aclient()
+    persona_choices = [
+        app_commands.Choice(name="Random", value="random"),
+        app_commands.Choice(name="Standard", value="standard"),
+    ]
+    for persona in personas.PERSONAS.keys() :
+        persona_choices.append(app_commands.Choice(name=persona, value=persona))
 
+    personas.current_persona = os.getenv("DEFAULT_PERSONA")
 
     @client.event
     async def on_ready():
@@ -311,17 +318,7 @@ def run_discord_bot():
 
 
     @client.tree.command(name="switchpersona", description="Switch between optional chatGPT jailbreaks")
-    @app_commands.choices(persona=[
-        app_commands.Choice(name="Random", value="random"),
-        app_commands.Choice(name="Standard", value="standard"),
-        app_commands.Choice(name="Do Anything Now 11.0", value="dan"),
-        app_commands.Choice(name="Superior Do Anything", value="sda"),
-        app_commands.Choice(name="Evil Confidant", value="confidant"),
-        app_commands.Choice(name="BasedGPT v2", value="based"),
-        app_commands.Choice(name="OPPO", value="oppo"),
-        app_commands.Choice(name="Developer Mode v2", value="dev"),
-        app_commands.Choice(name="Dave", value="dave")
-    ])
+    @app_commands.choices(persona=persona_choices)
     async def chat(interaction: discord.Interaction, persona: app_commands.Choice[str]):
         isReplyAll =  os.getenv("REPLYING_ALL")
         if isReplyAll == "True":
@@ -345,13 +342,6 @@ def run_discord_bot():
             await interaction.followup.send(f"> **Warn: Already set to `{persona}` persona**")
 
         elif persona == "standard":
-            chat_model = os.getenv("CHAT_MODEL")
-            if chat_model == "OFFICIAL":
-                # responses.chatbot.reset()
-                pass
-            elif chat_model == "UNOFFICIAL":
-                responses.chatbot.reset_chat()
-
             personas.current_persona = "standard"
             await interaction.followup.send(
                 f"> **Info: Switched to `{persona}` persona**")
@@ -368,7 +358,6 @@ def run_discord_bot():
 
         elif persona in personas.PERSONAS:
             try:
-                # await responses.switch_persona(persona)
                 personas.current_persona = persona
                 await interaction.followup.send(
                 f"> **Info: Switched to `{persona}` persona**")
